@@ -1,0 +1,60 @@
+import java.util.*;
+
+
+public class Bracket {
+    static Queue  q = new LinkedList();
+    static final int Max_Size = 5;
+    public static void main(String[] args) {
+        System.out.println("help를 입력하면 도움말 제공");
+
+        while(true){
+            System.out.print(">>");
+
+            try{
+                Scanner sc = new Scanner(System.in);                                        //Queue는 인터페이스이기에 LinkedList로 구현
+                String input = sc.nextLine().trim();                                        //trim( )으로 공백 제거
+
+                if("".equals(input)) continue;                                              //공백이면 다시 입력받음
+                if(input.equalsIgnoreCase("q")){
+                    System.exit(0);
+                }
+                else if(input.equalsIgnoreCase("help")){                         //equalsIgnoreCase로 대소문자 구분없이 비교
+                    System.out.println("help - 도움말 보여주기");
+                    System.out.println("q 또는 Q - 프로그램 종료");
+                    System.out.println("history - 최근에 입력한 명령어"+ Max_Size+"개 보여줍니다");
+                }
+                else if(input.equalsIgnoreCase("history")){
+                    int i =0;
+                    save(input);
+                    LinkedList tmp = (LinkedList) q;
+                    ListIterator it = tmp.listIterator();
+
+                    while(it.hasNext()){
+                        System.out.println(++i+"." + it.next());
+                    }
+
+                    /* list의 사이즈를 반복할때마다 불러냄 그래서 차라리 상수로 고정시키는게 훨씬 좋은 코드
+                    final int SIZE = list.size()
+                    for(int i=0; i<list.size(); i++)
+                        sout((i+1)+"."+list.get(i));
+                    */
+                }
+                else{
+                    save(input);
+                    System.out.println(input);
+                }
+            }catch(Exception e){
+                System.out.println("입력 오류");
+
+            }
+        }
+    }
+
+    public static void save(String input){
+        if(!"".equals(input)) q.offer(input);                                           //빈 공백 아니면 offer시킴
+
+        if(q.size()>Max_Size) q.remove();
+    }
+}
+
+
